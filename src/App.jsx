@@ -1,10 +1,9 @@
-import { SearchBar, Button } from './components'
+import { SearchBar } from './components'
 
 function App() {
   return (
     <div>
       <SearchBar />
-      <Button />
     </div>
 
   )

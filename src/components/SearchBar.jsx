@@ -1,13 +1,17 @@
 import { CssOutlined, Fullscreen } from '@mui/icons-material'
 import { Box, Button, Checkbox, Fade, FormControlLabel, Grow, TextField, Typography } from '@mui/material'
 import DeleteIcon from '@mui/icons-material/Delete';
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Reorder } from 'framer-motion';
 
 function SearchBar() {
     const [toDo, setToDo] = useState([])
     const [change, setChange] = useState('')
     const [click, setClick] = useState(false)
+
+    const [sizer, setSizer] = useState(window.innerWidth)
+
+    const [errorText, setErrorText] = useState(100)
 
     const handleAddToDo = () => {
         if (change !== '') {
@@ -38,7 +42,50 @@ function SearchBar() {
             handleAddToDo()
         }
     }
+    let textChanger = ''
+    const handleValueError = (e) => {
+        if (e.target.value.length <= 100 && window.innerWidth > 900) {
+            setChange(e.target.value)
+            setErrorText(100)
+        } else if (e.target.value.length <= 20 && window.innerWidth > 400) {
+            setChange(e.target.value)
+            setErrorText(20)
+        }
+        else if (e.target.value.length <= 12) {
+            setChange(e.target.value)
+            setErrorText(12)
+        }
+    }
 
+    const handleClearAll = () => {
+        setToDo((prevToDo) =>
+            prevToDo.map((item, index) => (
+                { ...item, visible: false }
+            )
+            )
+        )
+        setTimeout(() => {
+            setToDo([])
+        }, 300)
+
+    }
+    useEffect(() => {
+        window.addEventListener('resize', () => {
+            setSizer(window.innerWidth)
+        }, [])
+    }, [])
+
+    const handleDrop = (e, dropIndex) => {
+        const dragIndex = parseInt(e.dataTransfer.getData('index'));
+        const draggedToDo = toDo[dragIndex];
+
+        const newToDo = [{ ...item, visible: false }];
+        newToDo.splice(dragIndex, 1);
+        newToDo.splice(dropIndex, 0, draggedToDo);
+
+        setToDo(newToDo);
+    };
+    console.log(sizer)
     return (
         <Fade in={true}>
             <Box
@@ -70,8 +117,8 @@ function SearchBar() {
                 >
                     <TextField
                         value={change}
-                        onChange={(e) => setChange(e.target.value)}
-                        label='Enter To Do'
+                        onChange={handleValueError}
+                        label={`${change.length == errorText ? 'You Hit Max Letter' : 'Enter To Do'}`}
                         variant='outlined'
                         size='small'
                         onKeyDown={myFunction}
@@ -102,10 +149,7 @@ function SearchBar() {
                             style: { color: '#FDFFC2' }
                         }}
                     />
-                    <Box
-                        onClick={() => handleAddToDo()}
-                        sx={{ '& button': { p: 1, display: 'flex', gap: '1rem' } }}
-                    >
+                    <Box onClick={() => handleAddToDo()}>
                         <Button
                             sx={{
                                 color: 'white',
@@ -113,27 +157,70 @@ function SearchBar() {
                             type='submit'
                             color='info'
                             variant='contained'
-                            size='medium'
+                            size={'small'}
                         >
                             Add
                         </Button>
+
+                    </Box>
+                    <Box
+                        sx={{
+                            position: `absolute`,
+                            bottom: '1rem',
+                            right: '1rem'
+                        }}
+                        onClick={handleClearAll}>
+                        <Button
+                            sx={{
+                                color: 'white',
+                            }}
+                            type='submit'
+                            color='info'
+                            variant='contained'
+                            size='large'
+                        >
+                            Remove
+                        </Button>
+
                     </Box>
                 </Box>
                 <Box
-                    sx={{ width: '100%', display: 'flex', flexDirection: 'column', gap: '1rem', cursor: 'auto' }}
+                    sx={{
+                        width: '100%',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        gap: '1rem',
+                        cursor: 'auto',
+                        height: '400px',
+                        overflowY: 'auto',
+                        '&::-webkit-scrollbar': {
+                            width: '12px',
+                        },
+                        '&::-webkit-scrollbar-track': {
+                            background: '#f1f1f1',
+                        },
+                        '&::-webkit-scrollbar-thumb': {
+                            background: '#888',
+                        },
+                        '&::-webkit-scrollbar-thumb:hover': {
+                            background: '#555',
+                        },
+                        scrollBehavior: 'smooth',
+                        pr: '1rem',
+                    }}
                 >
 
 
                     {toDo.map((item, index) => (
                         <Grow
-                            onClick={() => setClick()}
                             in={item.visible
                             } key={index}>
                             <Box
                                 sx={{
+
                                     display: 'flex',
                                     alignItems: 'center',
-                                    gap: 1,
+                                    gap: ['0', 1],
                                 }}
                             >
                                 <Box
@@ -150,7 +237,7 @@ function SearchBar() {
                                 >
                                     {item.text}
                                 </Box>
-                                <Box sx={{ display: 'flex', gap: 1 }}>
+                                <Box sx={{ display: 'flex', gap: ['0', 1, 3] }}>
                                     <FormControlLabel
                                         onClick={() => false}
                                         value="top"
@@ -170,9 +257,34 @@ function SearchBar() {
                             </Box>
                         </Grow>
                     ))}
+                    <Fade
+                        in='true'
+                    >
+                        <Typography
+                            sx={{
+
+                                position: 'absolute',
+                                zIndex: '999',
+                                bottom: '5rem',
+                                fontSize: ['2em', '3em', '5em'],
+                            }}
+                            variant="h2"
+                            color="#fff">
+                            Press <span style={{ color: '#0288d1' }}>"Enter"</span> key or  <span style={{ color: '#0288d1' }}>(add)</span> button to add <span style={{ color: '#0288d1' }}>{`{To Do}`}</span> list
+                        </Typography>
+                    </Fade>
+                    <Typography
+                        sx={{
+                            position: 'absolute',
+                            bottom: ['1.5rem', '0', '0rem'],
+                            right: ['8.5rem', '10rem', '9rem'],
+                            fontSize: ['1.1em', '3em', '3rem']
+                        }}
+                        variant="h5"
+                        color="#fff">To remove all list Press </Typography>
                 </Box>
             </Box >
-        </Fade>
+        </Fade >
     )
 }
 

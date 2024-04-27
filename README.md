@@ -1,9 +1,14 @@
-# React + Vite
+# Hello there ⭐!
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This website project is aims to make To Do list using React / Mui 
 
-Currently, two official plugins are available:
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
-# To-Do-V1
+# Technologies Used ⚙️
+
+• React
+
+• Mui
+
+# Contributing 💬
+
+Contributions are welcome! Please open an issue or submit a pull request.
