@@ -191,7 +191,7 @@ function SearchBar() {
                         flexDirection: 'column',
                         gap: '1rem',
                         cursor: 'auto',
-                        height: '400px',
+                        height: `${toDo.length > 5 ? '400px' : '0'}`,
                         overflowY: 'auto',
                         '&::-webkit-scrollbar': {
                             width: '12px',
@@ -218,6 +218,9 @@ function SearchBar() {
                             <Box
                                 sx={{
 
+
+                                    position: 'relative',
+                                    zIndex: '3',
                                     display: 'flex',
                                     alignItems: 'center',
                                     gap: ['0', 1],
@@ -262,14 +265,16 @@ function SearchBar() {
                     >
                         <Typography
                             sx={{
-
                                 position: 'absolute',
-                                zIndex: '999',
+                                zIndex: '2',
                                 bottom: '5rem',
                                 fontSize: ['2em', '3em', '5em'],
+                                filter: `${toDo.length > 2 ? 'blur(.1rem)' : 'blur(0)'}`,
                             }}
                             variant="h2"
-                            color="#fff">
+                            color="#fff"
+
+                        >
                             Press <span style={{ color: '#0288d1' }}>"Enter"</span> key or  <span style={{ color: '#0288d1' }}>(add)</span> button to add <span style={{ color: '#0288d1' }}>{`{To Do}`}</span> list
                         </Typography>
                     </Fade>
