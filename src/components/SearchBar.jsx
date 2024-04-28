@@ -42,7 +42,6 @@ function SearchBar() {
             handleAddToDo()
         }
     }
-    let textChanger = ''
     const handleValueError = (e) => {
         if (e.target.value.length <= 100 && window.innerWidth > 900) {
             setChange(e.target.value)
@@ -74,7 +73,7 @@ function SearchBar() {
             setSizer(window.innerWidth)
         })
         localStorage.setItem('toDo', JSON.stringify(toDo))
-    }, [])
+    }, [toDo])
 
     const handleDrop = (e, dropIndex) => {
         const dragIndex = parseInt(e.dataTransfer.getData('index'));
