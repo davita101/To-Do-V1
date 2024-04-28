@@ -5,14 +5,14 @@ import React, { useEffect, useState } from 'react'
 import { Reorder } from 'framer-motion';
 
 function SearchBar() {
-    const [toDo, setToDo] = useState([])
+    const [toDo, setToDo] = useState(() => {
+        return JSON.parse(localStorage.getItem('toDo')) || []
+
+    })
     const [change, setChange] = useState('')
     const [click, setClick] = useState(false)
-
     const [sizer, setSizer] = useState(window.innerWidth)
-
     const [errorText, setErrorText] = useState(100)
-
     const handleAddToDo = () => {
         if (change !== '') {
             setToDo([...toDo, { text: change, visible: true }]);
@@ -72,7 +72,8 @@ function SearchBar() {
     useEffect(() => {
         window.addEventListener('resize', () => {
             setSizer(window.innerWidth)
-        }, [])
+        })
+        localStorage.setItem('toDo', JSON.stringify(toDo))
     }, [])
 
     const handleDrop = (e, dropIndex) => {
@@ -191,7 +192,7 @@ function SearchBar() {
                         flexDirection: 'column',
                         gap: '1rem',
                         cursor: 'auto',
-                        height: `${toDo.length > 5 ? '400px' : '0'}`,
+                        height: '400px',
                         overflowY: 'auto',
                         '&::-webkit-scrollbar': {
                             width: '12px',
